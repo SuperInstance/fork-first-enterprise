@@ -1,50 +1,37 @@
 # Fork-First Enterprise
-You don't rent software. You build on it.
+You run AI agents on your Cloudflare account. Not ours. Every API key, log entry, and byte of data stays inside your infrastructure.
 
-Enterprise software often prioritizes vendor lock-in over your operational needs. Fork-First Enterprise inverts that model. This is an open-source agent runtime and fleet protocol you deploy on your infrastructure. You own the code and data; you control updates and customization.
-
-## The Problem
-Vendor roadmaps change, prices increase, and critical features can be deprecated, leaving your team without solutions you relied on. Traditional SaaS gives you access, not ownership.
-
-## The Solution
-Fork this repository. Deploy it to your Cloudflare account. You own the entire instance—code, data, and deployment. We publish improvements; you choose if and when to merge them. There are no backdoors, kill switches, or mandatory upgrades.
+## Why This Exists
+Teams can spend months auditing vendors just to run a simple internal AI agent. You shouldn't need legal signoff to test code. This model puts you in control from the start.
 
 ## Quick Start
-Deploy your own instance in minutes:
-1.  Fork this repository.
-2.  Log into your Cloudflare account and run `npx wrangler deploy`.
-3.  Configure environment variables for your API keys.
+1.  **Fork** this repository to your GitHub account.
+2.  From your fork, **deploy** using `npx wrangler deploy` while logged into your Cloudflare account.
+3.  **Configure** your external API keys and settings via environment variables in the Cloudflare dashboard.
 
-Your instance is now live on your domain, using your Cloudflare resources (Workers, KV, R2). No one else has access.
+Your independent instance is live, typically in under ten minutes. There are zero ongoing fees.
 
-## How It Works
-This is a fork-first model. Your deployment is independent.
-```
-your-fork  ←→  upstream/main
-    │               │
-your changes   our improvements
-    └───── merge when ready ─────┘
-```
-You maintain full control. Merge upstream updates on your schedule, adopting what's useful for your team.
+## What This Provides
+*   **No Data Transit**: We never see requests, logs, or keys. Your Cloudflare Worker communicates directly with your configured services.
+*   **Forked Ownership**: You own the deployed copy. The upstream repository could disappear without affecting your live instance.
+*   **Zero Runtime Dependencies**: The Worker uses no external npm packages, eliminating a common source of breaking updates.
 
-## Core Features
-All features are available in the open-source repository.
-- **Complete Data Ownership**: Data resides solely in your Cloudflare KV and R2 storage.
-- **BYOK (Bring Your Own Keys)**: All API keys remain in your environment variables.
-- **Role-Based Access**: Built-in roles (Admin, Editor, Viewer) that you can extend.
-- **Audit Logging**: Immutable action logs written to your KV store.
-- **Custom Branding**: Use your domain, SSL certificates, and logos.
-- **Multi-Tenancy**: Isolate data using separate KV namespaces.
+## Architecture
+A single Cloudflare Worker functions as an autonomous agent runtime. It uses your Cloudflare KV namespace for agent memory and state, and your R2 bucket for file storage. You control the entire stack.
 
-## One Honest Limitation
-As the maintainer of your fork, you are responsible for operational maintenance, security updates, and merging upstream changes. This grants you control but requires active stewardship.
+## Features
+- **Full Control**: You own all code and data. Merge updates from this upstream repo only if you choose to.
+- **Your Keys**: Configure OpenAI, Anthropic, or other API keys solely in your Cloudflare environment.
+- **Configurable Access**: Set user roles and permissions within the code of your fork.
+- **Action Logging**: Agent actions are logged to your KV store. (Default configuration retains the last 10,000 entries).
+- **Custom Branding**: Serve from your own domain and adjust the interface to match your organization.
 
-## Attribution
-Fork-First Enterprise is part of the Cocapn Fleet.  
-Maintained by Superinstance & Lucineer (DiGennaro et al.).
+## One Clear Limitation
+The provided setup is designed for low-to-moderate traffic. On Cloudflare's free tier, your instance is limited to 100,000 requests per day. For higher volumes, you must upgrade your Cloudflare Workers plan.
 
----
-<div>
-  <a href="https://the-fleet.casey-digennaro.workers.dev">The Fleet</a> |
-  <a href="https://cocapn.ai">Cocapn.ai</a>
-</div>
+## The Fork-First Model
+You maintain the primary deployment of your forked instance. You can modify it freely for your team's needs. We may publish improvements to this upstream repository, which you can review and merge at your discretion.
+
+Open source, MIT licensed.
+
+<div style="text-align:center;padding:16px;color:#64748b;font-size:.8rem"><a href="https://the-fleet.casey-digennaro.workers.dev" style="color:#64748b">The Fleet</a> &middot; <a href="https://cocapn.ai" style="color:#64748b">Cocapn</a></div>
